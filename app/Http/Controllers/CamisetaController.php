@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class CamisetaController extends Controller
 {
+    /*Mostrar*/
+    public function mostrarCamiseta(){
+        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        return view('principal', compact('listaCamiseta'));
+    }
     /**
      * Display a listing of the resource.
      *

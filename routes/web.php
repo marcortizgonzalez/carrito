@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*Mostrar*/
+Route::get('/principal',[CamisetaController::class, 'mostrarCamiseta']);
+
+/*Crear*/
+Route::get('/crear',[CamisetaController::class, 'crearCamiseta']);
+
+Route::post('/crear',[CamisetaController::class, 'crearCamisetaPost']);
+
+/*Eliminar*/
+Route::delete('/eliminarCamiseta/{id}', [CamisetaController::class, 'eliminarCamiseta']);
