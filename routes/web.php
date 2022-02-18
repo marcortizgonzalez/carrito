@@ -24,6 +24,8 @@ Route::get('logout',[CamisetaController::class, 'logout']);
 /*Mostrar*/
 Route::get('/principal',[CamisetaController::class, 'mostrarCamiseta']);
 
+Route::get('/principal_admin',[CamisetaController::class, 'mostrarCamisetaAdm']);
+
 /*Crear*/
 Route::get('/crear',[CamisetaController::class, 'crearCamiseta']);
 
