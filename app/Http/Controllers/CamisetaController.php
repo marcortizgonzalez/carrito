@@ -19,7 +19,7 @@ class CamisetaController extends Controller
         $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
         return view('principal', compact('listaCamiseta'));
     }
-    
+  
     /*LogIn*/
     public function login(){
         return view('login');
@@ -65,10 +65,48 @@ class CamisetaController extends Controller
         }
     }
 
-    /*logout*/
+    /*Logout*/
     public function logout(Request $request){
         //Eliminar todas las variables de sesion
         $request->session()->flush();
         return redirect('/');
+    }
+  
+      /*Eliminar camiseta*/
+    public function eliminarCamiseta($id){
+        try{
+            DB::beginTransaction();
+            DB::table('tbl_camiseta')->where('id','=',$id)->delete();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return $e->getMessage();
+        }
+        return redirect('principal_admin');
+    }
+  
+  
+  /*Crear*/
+    public function crearCamiseta(){
+        return view('crear');
+    }
+
+    public function crearCamisetaPost(CamisetaCrear  $request){
+        $datos = $request->except('_token');
+        if($request->hasFile('foto_cami')){
+            $datos['foto_cami'] = $request->file('foto_cami')->store('uploads','public');
+        }else{
+            $datos['foto_cami'] = NULL;
+        }
+
+        try{
+            DB::beginTransaction();
+            $id = DB::table('tbl_camiseta')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio"=>$datos['precio']]);
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return $e->getMessage();
+        }
+        return redirect('principal_admin');
     }
 }
