@@ -14,6 +14,13 @@ use App\Http\Controllers\CamisetaController;
 |
 */
 
+/*LogIn y LogOut*/
+Route::get('',[CamisetaController::class, 'login']);
+
+Route::post('login',[CamisetaController::class, 'loginPost']);
+
+Route::get('logout',[CamisetaController::class, 'logout']);
+
 /*Mostrar*/
 Route::get('/principal',[CamisetaController::class, 'mostrarCamiseta']);
 
