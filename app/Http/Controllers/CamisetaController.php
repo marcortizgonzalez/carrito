@@ -19,6 +19,12 @@ class CamisetaController extends Controller
         $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
         return view('principal', compact('listaCamiseta'));
     }
+
+    /*Mostrar ADMIN*/
+    public function mostrarCamisetaAdm(){
+        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        return view('principal_admin', compact('listaCamiseta'));
+    }
   
     /*LogIn*/
     public function login(){
@@ -72,7 +78,7 @@ class CamisetaController extends Controller
         return redirect('/');
     }
   
-      /*Eliminar camiseta*/
+    /*Eliminar camiseta*/
     public function eliminarCamiseta($id){
         try{
             DB::beginTransaction();
@@ -86,7 +92,7 @@ class CamisetaController extends Controller
     }
   
   
-  /*Crear*/
+    /*Crear*/
     public function crearCamiseta(){
         return view('crear');
     }
