@@ -1,3 +1,9 @@
+@if (!Session::get('correo_usu')||Session::get('rol_usu') != "usuario")
+    <?php
+        //Si la session no esta definida te redirige al login, la session se crea en el método.
+        return redirect()->to('/')->send();
+    ?>
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
