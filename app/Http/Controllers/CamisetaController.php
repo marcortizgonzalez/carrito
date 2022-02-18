@@ -19,6 +19,44 @@ class CamisetaController extends Controller
         $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
         return view('principal', compact('listaCamiseta'));
     }
+
+    /*Crear*/
+    public function crearCamiseta(){
+        return view('crear');
+    }
+
+    public function crearCamisetaPost(CamisetaCrear  $request){
+        $datos = $request->except('_token');
+        if($request->hasFile('foto_cami')){
+            $datos['foto_cami'] = $request->file('foto_cami')->store('uploads','public');
+        }else{
+            $datos['foto_cami'] = NULL;
+        }
+
+        try{
+            DB::beginTransaction();
+            $id = DB::table('tbl_camiseta')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio"=>$datos['precio']]);
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return $e->getMessage();
+        }
+        return redirect('principal_admin');
+    }
+
+    /*Eliminar*/
+    public function eliminarCamiseta($id){
+        try{
+            DB::beginTransaction();
+            DB::table('tbl_camiseta')->where('id','=',$id)->delete();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return $e->getMessage();
+        }
+        return redirect('principal_admin');
+    }
+
     /**
      * Display a listing of the resource.
      *
