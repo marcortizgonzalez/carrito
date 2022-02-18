@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Camiseta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
+use App\Http\Controllers\Exception;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\EnviarMensaje;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\CamisetaCrear;
 
 class CamisetaController extends Controller
 {
