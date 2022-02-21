@@ -14,12 +14,21 @@
     <title>ADMIN Camisetas</title>
     <link rel="stylesheet" href="{!! asset('css/style.css') !!}">
 </head>
-<body class="mostrar">
+<body class="mostrar">    
+    <center>
+        <h1>ADMINISTRADOR</h1>
+    </center>
     <div>
         <form action="{{url('logout')}}" method="GET">
             <button id="logout" class= "botonCre" type="submit" name="logout" value="logout">Logout</button>
         </form>
     </div>
+    <div>
+        <form action="{{url('crear')}}" method="GET">
+            <button class= "botonCre" type="submit" name="Crear" value="Crear">Crear</button>
+        </form>
+    </div>
+
     <div class="row flex-cv">
         <table class="table">
             <tr class="active">
@@ -27,7 +36,6 @@
                 <th>NOMBRE</th>
                 <th>PRECIO</th>
                 <th>FOTO</th>
-                <th>CREAR</th>
                 <th>ELIMINAR</th>
             </tr>
             @foreach($listaCamiseta as $camiseta)
@@ -36,10 +44,6 @@
                     <td>{{$camiseta->nombre_cami}}</td>
                     <td>{{$camiseta->precio_cami}}€</td>
                     <td style="padding: auto; text-align: center"><img src="{{asset('storage').'/'.$camiseta->foto_cami}}" width="100"></td>
-                    <td><form action="{{url('crearCamiseta')}}" method="GET">
-                        <button class= "botonCre" type="submit" name="Crear" value="Crear">Crear</button>
-                        </form>
-                    </td>
                     <td><form action="{{url('eliminarCamiseta/'.$camiseta->id)}}" method="POST">
                         @csrf
                         <!--{{csrf_field()}}--->

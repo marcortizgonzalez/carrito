@@ -29,7 +29,7 @@ Route::get('/principal_admin',[CamisetaController::class, 'mostrarCamisetaAdm'])
 /*Crear*/
 Route::get('/crear',[CamisetaController::class, 'crearCamiseta']);
 
-Route::post('/crear',[CamisetaController::class, 'crearCamisetaPost']);
+Route::post('/crear-proc',[CamisetaController::class, 'crearCamisetaPost']);
 
 /*Eliminar*/
 Route::delete('/eliminarCamiseta/{id}', [CamisetaController::class, 'eliminarCamiseta']);
