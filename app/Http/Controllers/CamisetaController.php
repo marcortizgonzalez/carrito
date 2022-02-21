@@ -20,6 +20,11 @@ class CamisetaController extends Controller
         return view('principal', compact('listaCamiseta'));
     }
 
+    public function mostrarCamisetaLog(){
+        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        return view('principal_log', compact('listaCamiseta'));
+    }
+
     /*Mostrar ADMIN*/
     public function mostrarCamisetaAdm(){
         $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
@@ -28,6 +33,10 @@ class CamisetaController extends Controller
   
     /*LogIn*/
     public function login(){
+        return view('principal_log');
+    }
+
+    public function loginusu(){
         return view('login');
     }
 
@@ -47,6 +56,7 @@ class CamisetaController extends Controller
             $userId = DB::table('tbl_usuario')->where('correo_usu', '=', $datos['correo_usu'])->where('pass_usu', '=', ($datos['pass_usu']))->first();
             //De los datos obtenidos consultamos el campo en concreto
             $rol_usu = $userId->rol_usu;
+            $correo_usu=$datos['correo_usu'];
             //En caso de que la query $queryId devuelva como resultado 1(Coincidenci de datos haz...)
             if ($queryId == 1){
                 //Establecemos sesión, solcitando el dato a Request
@@ -57,6 +67,7 @@ class CamisetaController extends Controller
                     //return $datos;
                 }else{
                     $request->session()->put('rol_usu', $rol_usu);
+                    $request->session()->put('correo_usu', $correo_usu);
                     return redirect("/principal");
                     //return $datos;
                 }
