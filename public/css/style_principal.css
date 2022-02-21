@@ -60,6 +60,36 @@ header {
 
 /* CLASES DE COLUMNAS FOOTER */
 
+.one-column-s1-l {
+    float: left;
+    padding-left: 15px;
+    text-decoration: none;
+}
+
+.one-column-s1 {
+    float: right;
+    padding-right: 15px;
+    text-decoration: none;
+}
+
+.filtro {
+    padding: 20px 40px 20px 40px;
+}
+
+.filtro input,
+.filtro select {
+    padding: 10px;
+    border-radius: 3px;
+}
+
+#section1 {
+    background-color: rgb(240, 240, 240);
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 100;
+    top: 0;
+}
+
 .one-column-footer {
     padding: 10px;
     float: left;
