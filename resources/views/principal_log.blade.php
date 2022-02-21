@@ -1,9 +1,3 @@
-@if (!Session::get('correo_usu')||Session::get('rol_usu') != "usuario")
-    <?php
-        //Si la session no esta definida te redirige al login, la session se crea en el método.
-        return redirect()->to('/')->send();
-    ?>
-@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,21 +27,11 @@
         </form>
     </div>
     -->
-    <div class="one-column-s1">
-        <a href="{{ url('carrito')}}">
-            <p><b style="padding-right: 10px;" onclick=""><img src="../public/img/carrito.png" alt="carrito" width="25px"></b></p>
-        </a>
-    </div>
 
     <div class="one-column-s1-l">
-        <a href="{{ url('logout')}}">
-            <p><b><img src="../public/img/logout.png" alt=logout" width="25px"></b></p>
+        <a href="{{ url('login')}}">
+            <p><b><img src="../public/img/login.png" alt=logout" width="25px"></b></p>
         </a>
-        </div>
-        <div>
-            <marquee behavior="scroll" direction="right" scrolldelay="1">Bienvenido @php echo Session::get('correo_usu') @endphp</marquee>
-            <br>
-            <br>
         </div>
 </div>
 
@@ -62,7 +46,7 @@
             <p><b>{{$camiseta->nombre_cami}}</b></p>
             <p style="color: rgba(112, 0, 0, 0.705)"> ̶8̶9̶,̶9̶5̶€̶</p>
             <h3>{{$camiseta->precio_cami}}€</h3>
-            <form action="{{url('enviarDinero/10/'.$camiseta->id)}}" method="GET">
+            <form action="{{url('login')}}" method="GET">
             <select name="talla_cami" id="talla_cami">
                 <option value="M">TALLA</option>
                     <option value="XS">XS</option>
