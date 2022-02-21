@@ -1,0 +1,96 @@
+* {
+    box-sizing: border-box;
+    /* font */
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+
+/* Clear floats after the columns */
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* CLASES HEADER */
+
+header {
+    background-image: url(../img/header.jpg);
+    background-size: cover;
+    padding: 30px;
+    color: white;
+    font-size: 30px;
+}
+
+
+/* CLASES BODY */
+
+.titulo {
+    padding-top: 70px;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.three-column {
+    width: 33.33%;
+    float: left;
+    text-align: center;
+    padding: 20px 0px 50px 0px;
+}
+
+.box {
+    margin: 30px;
+    padding: 20px;
+}
+
+.box:hover {
+    background-color: rgba(241, 241, 241, 0.808);
+}
+
+.añadir {
+    cursor: pointer;
+}
+
+
+/* CLASES DE COLUMNAS FOOTER */
+
+.one-column-footer {
+    padding: 10px;
+    float: left;
+    color: white;
+    width: 100%;
+}
+
+.two-column-footer {
+    float: left;
+    width: 15%;
+}
+
+.four-column-footer {
+    float: left;
+    padding: 0px 5% 0px 5%;
+    width: 25%;
+    color: white;
+}
+
+.one-column-footer p {
+    font-weight: 500;
+}
+
+.four-column-footer p {
+    font-weight: 500;
+}
+
+#footer1 {
+    background-color: #3c4048;
+}
+
+#footer2 {
+    background-color: #000000;
+}
