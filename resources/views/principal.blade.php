@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style_principal.css">
+    <script src="js/ajaxPrincipal.js"></script>
 </head>
 <body>
 <header>
@@ -24,10 +25,31 @@
     </center>
 </header>
 
-<div class="row">
+<div class="row" id="section1">
+    <!--
+    <div class="filtro">
+        <form method="post" onsubmit="return false;">
+            <input type="text" name="nombre_cami" id="nombre_cami" placeholder="Nombre..." onkeyup="filtro();return false;">
+        </form>
+    </div>
+    -->
+    <div class="one-column-s1">
+        <a href="{{ url('carrito')}}">
+            <p><b style="padding-right: 10px;" onclick=""><img src="../public/img/carrito.png" alt="carrito" width="25px"></b></p>
+        </a>
+    </div>
+
+    <div class="one-column-s1-l">
+        <a href="{{ url('logout')}}">
+            <p><b><img src="../public/img/logout.png" alt=logout" width="25px"></b></p>
+        </a>
+        </div>
+</div>
+
+<div class="row" id="camisetas">
     <div class="titulo">
         <h2>CAMISETAS MÁS POPULARES</h2>
-    </div>
+    </div> 
     @foreach ($listaCamiseta as $camiseta)
     <div class="three-column">
         <div class="box">
@@ -36,7 +58,17 @@
             <p style="color: rgba(112, 0, 0, 0.705)"> ̶8̶9̶,̶9̶5̶€̶</p>
             <h3>{{$camiseta->precio_cami}}€</h3>
             <form action="{{url('enviarDinero/10/'.$camiseta->id)}}" method="GET">
-                <button class="añadir" id="logout" type="submit" name="Pagar" value="Pagar">Añadir al carrito</button>
+            <select name="talla_cami" id="talla_cami">
+                <option value="M">TALLA</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+            </select>
+            <br>
+            <br>
+            <button class="añadir" id="logout" type="submit" name="Pagar" value="Pagar">Añadir al carrito</button>
             </form>
         </div>
     </div>

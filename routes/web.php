@@ -26,6 +26,9 @@ Route::get('/principal',[CamisetaController::class, 'mostrarCamiseta']);
 
 Route::get('/principal_admin',[CamisetaController::class, 'mostrarCamisetaAdm']);
 
+//Filtro Principal en AJAX
+Route::post('principal/show',[CamisetaController::class,'show']);
+
 /*Crear*/
 Route::get('/crear',[CamisetaController::class, 'crearCamiseta']);
 
