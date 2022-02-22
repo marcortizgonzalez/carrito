@@ -55,6 +55,9 @@
     <div class="titulo">
         <h2>CAMISETAS MÁS POPULARES</h2>
     </div> 
+    <div>
+        @
+    </div>
     @foreach ($listaCamiseta as $camiseta)
     <div class="three-column">
         <div class="box">
@@ -62,7 +65,9 @@
             <p><b>{{$camiseta->nombre_cami}}</b></p>
             <p style="color: rgba(112, 0, 0, 0.705)"> ̶8̶9̶,̶9̶5̶€̶</p>
             <h3>{{$camiseta->precio_cami}}€</h3>
-            <form action="{{url('enviarDinero/10/'.$camiseta->id)}}" method="GET">
+            <form action="{{url('cart-add')}}" method="POST">
+                @csrf
+                <input type="hidden" name="producto_id" value="{{$camiseta->id}}">
             <select name="talla_cami" id="talla_cami">
                 <option value="M">TALLA</option>
                     <option value="XS">XS</option>

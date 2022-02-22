@@ -16,18 +16,18 @@ class CamisetaController extends Controller
 {
     /*Mostrar*/
     public function mostrarCamiseta(){
-        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        $listaCamiseta = DB::table('camisetas')->select('*')->get();
         return view('principal', compact('listaCamiseta'));
     }
 
     public function mostrarCamisetaLog(){
-        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        $listaCamiseta = DB::table('camisetas')->select('*')->get();
         return view('principal_log', compact('listaCamiseta'));
     }
 
     /*Mostrar ADMIN*/
     public function mostrarCamisetaAdm(){
-        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        $listaCamiseta = DB::table('camisetas')->select('*')->get();
         return view('principal_admin', compact('listaCamiseta'));
     }
   
@@ -93,7 +93,7 @@ class CamisetaController extends Controller
     public function eliminarCamiseta($id){
         try{
             DB::beginTransaction();
-            DB::table('tbl_camiseta')->where('id','=',$id)->delete();
+            DB::table('camisetas')->where('id','=',$id)->delete();
             DB::commit();
         }catch(\Exception $e){
             DB::rollBack();
@@ -101,7 +101,21 @@ class CamisetaController extends Controller
         }
         return redirect('principal_admin');
     }
-  
+
+    /*Âñadir al carro*/
+    public function CartAdd(Request $request){
+        $producto = Camiseta::find($request->producto_id);
+        $comp = $request->session()->get('carrito');
+        if (isset($comp)){
+            $array1 = $request->session()->get('carrito');
+            $array2[] = $producto->id;
+            $request->session()->put('carrito',array_merge($array1,$array2));
+        } else {
+            $array1[] = $producto->id;
+            $request->session()->put('carrito', $array1);
+        }
+        return $request->session()->get('carrito');
+    }
   
     /*Crear*/
     public function crearCamiseta(){
@@ -119,7 +133,7 @@ class CamisetaController extends Controller
         return $datos;
         try{
             DB::beginTransaction();
-                DB::table('tbl_camiseta')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio_cami"=>$datos['precio_cami']]);
+                DB::table('camisetas')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio_cami"=>$datos['precio_cami']]);
             DB::commit();
             return redirect('principal_admin');
         }catch(\Exception $e){
