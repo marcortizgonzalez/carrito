@@ -55,9 +55,6 @@
     <div class="titulo">
         <h2>CAMISETAS MÁS POPULARES</h2>
     </div> 
-    <div>
-        @
-    </div>
     @foreach ($listaCamiseta as $camiseta)
     <div class="three-column">
         <div class="box">
