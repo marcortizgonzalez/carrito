@@ -14,6 +14,9 @@ use App\Http\Controllers\CamisetaController;
 |
 */
 
+/*Añadir carrito */
+Route::post('/cart-add',[CamisetaController::class, 'CartAdd']);
+
 /*LogIn y LogOut*/
 Route::get('',[CamisetaController::class, 'mostrarCamisetaLog']);
 
