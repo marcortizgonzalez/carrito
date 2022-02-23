@@ -34,8 +34,15 @@
     </div>
     -->
     <div class="one-column-s1">
-        <a href="{{ url('carrito')}}">
-            <p><b style="padding-right: 10px;" onclick=""><img src="../public/img/carrito.png" alt="carrito" width="25px"></b></p>
+        <a href="{{ url('carritoview')}}">
+            <p><b style="padding-right: 10px;" onclick=""><img src="../public/img/carrito.png" alt="carrito" width="25px">@php
+                if (isset($array3)){
+                    $numbb = count($array3);
+                    print_r($numbb);
+                }else{
+                    echo "0";
+                }
+            @endphp</b></p>
         </a>
     </div>
 
@@ -65,7 +72,7 @@
             <p><b>{{$camiseta->nombre_cami}}</b></p>
             <p style="color: rgba(112, 0, 0, 0.705)"> ̶8̶9̶,̶9̶5̶€̶</p>
             <h3>{{$camiseta->precio_cami}}€</h3>
-            <form action="{{url('cart-add')}}" method="POST">
+            <form action="{{url('carritoadd')}}" method="POST">
                 @csrf
                 <input type="hidden" name="producto_id" value="{{$camiseta->id}}">
             <select name="talla_cami" id="talla_cami">

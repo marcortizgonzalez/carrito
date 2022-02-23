@@ -15,9 +15,10 @@ use App\Http\Requests\CamisetaCrear;
 class CamisetaController extends Controller
 {
     /*Mostrar*/
-    public function mostrarCamiseta(){
+    public function mostrarCamiseta(Request $request){
+        $array3 = $request->session()->get('carrito');
         $listaCamiseta = DB::table('camisetas')->select('*')->get();
-        return view('principal', compact('listaCamiseta'));
+        return view('principal', compact('listaCamiseta'),compact('array3'));
     }
 
     public function mostrarCamisetaLog(){
@@ -114,7 +115,19 @@ class CamisetaController extends Controller
             $array1[] = $producto->id;
             $request->session()->put('carrito', $array1);
         }
-        return $request->session()->get('carrito');
+        //$array3=$request->session()->get('carrito');
+        //return view('carritoview', compact('array3'));
+        //return $array3;
+        return redirect('principal');
+    }
+    /*Checkout carro*/
+    //public function CartCheckout(){
+        //return view('carritoview');
+    //}
+    public function CartCheckout(Request $request){
+        $array3 = $request->session()->get('carrito');
+
+        return view('carritoview', compact('array3'));
     }
   
     /*Crear*/
