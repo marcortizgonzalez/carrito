@@ -160,6 +160,19 @@ class CamisetaController extends Controller
         }
     }
 
+
+    /*COMPRAR PROCESO Y MANDAR CORREO */
+    //Enviar correo al propietario
+    public function comprar(Request $request){
+    $sub = "Compra realizada con exito";
+    $msj = "Detalle del pedido: ".$request->input('array_pedido')." 
+    \r\nSe ha realizado la compra con el correo: ".session('correo_usu')."
+    \r\nCualquier inconveniente no dude en contactarnos. \r\n Atentamente el equipo de BBB CAMISETAS DE FÚTBOL";
+    $datos = array('message'=>$msj);
+    $enviar = new EnviarMensaje($datos);
+    $enviar->sub = $sub;
+    Mail::to(session('correo_usu'))->send($enviar);
+
     /*Dinero*/
     public function enviarDinero($precio){
         //$resultado = $precio.','.$id;
@@ -213,5 +226,6 @@ class CamisetaController extends Controller
 
     public function compra(){
         return "La compra se ha completado con exito";
+
     }
 }
