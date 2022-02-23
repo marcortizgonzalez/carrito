@@ -15,9 +15,10 @@ use App\Http\Requests\CamisetaCrear;
 class CamisetaController extends Controller
 {
     /*Mostrar*/
-    public function mostrarCamiseta(){
+    public function mostrarCamiseta(Request $request){
+        $array3 = $request->session()->get('carrito');
         $listaCamiseta = DB::table('camisetas')->select('*')->get();
-        return view('principal', compact('listaCamiseta'));
+        return view('principal', compact('listaCamiseta'),compact('array3'));
     }
 
     public function mostrarCamisetaLog(){
@@ -114,7 +115,24 @@ class CamisetaController extends Controller
             $array1[] = $producto->id;
             $request->session()->put('carrito', $array1);
         }
-        return $request->session()->get('carrito');
+        //$array3=$request->session()->get('carrito');
+        //return view('carritoview', compact('array3'));
+        //return $array3;
+        return redirect('principal');
+    }
+    /*Checkout carro*/
+    //public function CartCheckout(){
+        //return view('carritoview');
+    //}
+    public function CartCheckout(Request $request){
+        $array3 = $request->session()->get('carrito');
+
+        return view('carritoview', compact('array3'));
+    }
+    
+    public function CartClearOut(Request $request){
+        $request->session()->forget('carrito');
+        return redirect('principal');
     }
   
     /*Crear*/
@@ -142,4 +160,58 @@ class CamisetaController extends Controller
         }
     }
 
+    /*Dinero*/
+    public function enviarDinero($precio){
+        //$resultado = $precio.','.$id;
+        //return $resultado;
+
+        //Aqui generamos la clase ApiContext que es la que hace la conexión
+        $apiContext = new \PayPal\Rest\ApiContext(
+        new \PayPal\Auth\OAuthTokenCredential(
+            config('services.paypal.client_id'),     // ClientID
+            config('services.paypal.client_secret')      // ClientSecret
+        ));
+
+        //Generamos otra clase Payer
+        $payer = new \PayPal\Api\Payer();
+        $payer->setPaymentMethod('paypal');
+
+        //Generamos la tercera clase (Amount) que dice la cantidad a pagar
+        $amount = new \PayPal\Api\Amount();
+
+        //precio a pagar
+        $amount->setTotal($precio);
+        $amount->setCurrency('EUR');
+
+        //Generamos otra clase donde le pasamos el precio y la moneda
+        $transaction = new \PayPal\Api\Transaction();
+        $transaction->setAmount($amount);
+
+        //le envioa la pagina informacion del id
+        //si se cancela lo llevo a la pagina que quiero
+        $redirectUrls = new \PayPal\Api\RedirectUrls();
+        $redirectUrls->setReturnUrl(url("comprado"))->setCancelUrl(url("/"));
+
+        $payment = new \PayPal\Api\Payment();
+        $payment->setIntent('sale')
+            ->setPayer($payer)
+            ->setTransactions(array($transaction))
+            ->setRedirectUrls($redirectUrls);
+
+        try {
+            $payment->create($apiContext);
+            //me redirige a la pagina de compra
+            return redirect()->away( $payment->getApprovalLink());
+
+        }catch (\PayPal\Exception\PayPalConnectionException $ex) {
+            // This will print the detailed information on the exception.
+            //REALLY HELPFUL FOR DEBUGGING
+            echo $ex->getData();
+        }
+
+    }
+
+    public function compra(){
+        return "La compra se ha completado con exito";
+    }
 }
