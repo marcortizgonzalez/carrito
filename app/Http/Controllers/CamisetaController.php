@@ -139,7 +139,5 @@ class CamisetaController extends Controller
     $enviar = new EnviarMensaje($datos);
     $enviar->sub = $sub;
     Mail::to(session('correo_usu'))->send($enviar);
-    //redirección a index
-    return redirect('pagina de pedido realizado con exito volver a pagina principal');
     }
 }
