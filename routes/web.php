@@ -14,6 +14,15 @@ use App\Http\Controllers\CamisetaController;
 |
 */
 
+/*Carrito */
+Route::post('/carritoadd',[CamisetaController::class, 'CartAdd']);
+
+Route::get('/carritoview',[CamisetaController::class, 'CartCheckout']);
+
+Route::get('/carritovaciar',[CamisetaController::class, 'CartClearOut']);
+
+//Route::get('/carritoview',[CamisetaController::class, 'CartCheckout']);
+
 /*LogIn y LogOut*/
 Route::get('',[CamisetaController::class, 'mostrarCamisetaLog']);
 
@@ -40,3 +49,8 @@ Route::post('/crear-proc',[CamisetaController::class, 'crearCamisetaPost']);
 
 /*Eliminar*/
 Route::delete('/eliminarCamiseta/{id}', [CamisetaController::class, 'eliminarCamiseta']);
+
+/*Dinero*/
+Route::get('enviarDinero/{precio_total}/',[CamisetaController::class, 'enviarDinero']);
+
+Route::get('comprado',[CamisetaController::class, 'compra']);

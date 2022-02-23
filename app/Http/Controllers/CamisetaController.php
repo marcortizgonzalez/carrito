@@ -15,19 +15,20 @@ use App\Http\Requests\CamisetaCrear;
 class CamisetaController extends Controller
 {
     /*Mostrar*/
-    public function mostrarCamiseta(){
-        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
-        return view('principal', compact('listaCamiseta'));
+    public function mostrarCamiseta(Request $request){
+        $array3 = $request->session()->get('carrito');
+        $listaCamiseta = DB::table('camisetas')->select('*')->get();
+        return view('principal', compact('listaCamiseta'),compact('array3'));
     }
 
     public function mostrarCamisetaLog(){
-        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        $listaCamiseta = DB::table('camisetas')->select('*')->get();
         return view('principal_log', compact('listaCamiseta'));
     }
 
     /*Mostrar ADMIN*/
     public function mostrarCamisetaAdm(){
-        $listaCamiseta = DB::table('tbl_camiseta')->select('*')->get();
+        $listaCamiseta = DB::table('camisetas')->select('*')->get();
         return view('principal_admin', compact('listaCamiseta'));
     }
   
@@ -93,7 +94,7 @@ class CamisetaController extends Controller
     public function eliminarCamiseta($id){
         try{
             DB::beginTransaction();
-            DB::table('tbl_camiseta')->where('id','=',$id)->delete();
+            DB::table('camisetas')->where('id','=',$id)->delete();
             DB::commit();
         }catch(\Exception $e){
             DB::rollBack();
@@ -101,7 +102,38 @@ class CamisetaController extends Controller
         }
         return redirect('principal_admin');
     }
-  
+
+    /*Âñadir al carro*/
+    public function CartAdd(Request $request){
+        $producto = Camiseta::find($request->producto_id);
+        $comp = $request->session()->get('carrito');
+        if (isset($comp)){
+            $array1 = $request->session()->get('carrito');
+            $array2[] = $producto->id;
+            $request->session()->put('carrito',array_merge($array1,$array2));
+        } else {
+            $array1[] = $producto->id;
+            $request->session()->put('carrito', $array1);
+        }
+        //$array3=$request->session()->get('carrito');
+        //return view('carritoview', compact('array3'));
+        //return $array3;
+        return redirect('principal');
+    }
+    /*Checkout carro*/
+    //public function CartCheckout(){
+        //return view('carritoview');
+    //}
+    public function CartCheckout(Request $request){
+        $array3 = $request->session()->get('carrito');
+
+        return view('carritoview', compact('array3'));
+    }
+    
+    public function CartClearOut(Request $request){
+        $request->session()->forget('carrito');
+        return redirect('principal');
+    }
   
     /*Crear*/
     public function crearCamiseta(){
@@ -119,7 +151,7 @@ class CamisetaController extends Controller
         return $datos;
         try{
             DB::beginTransaction();
-                DB::table('tbl_camiseta')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio_cami"=>$datos['precio_cami']]);
+                DB::table('camisetas')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio_cami"=>$datos['precio_cami']]);
             DB::commit();
             return redirect('principal_admin');
         }catch(\Exception $e){
@@ -127,6 +159,7 @@ class CamisetaController extends Controller
             return $e->getMessage();
         }
     }
+
 
     /*COMPRAR PROCESO Y MANDAR CORREO */
     //Enviar correo al propietario
@@ -139,5 +172,60 @@ class CamisetaController extends Controller
     $enviar = new EnviarMensaje($datos);
     $enviar->sub = $sub;
     Mail::to(session('correo_usu'))->send($enviar);
+
+    /*Dinero*/
+    public function enviarDinero($precio){
+        //$resultado = $precio.','.$id;
+        //return $resultado;
+
+        //Aqui generamos la clase ApiContext que es la que hace la conexión
+        $apiContext = new \PayPal\Rest\ApiContext(
+        new \PayPal\Auth\OAuthTokenCredential(
+            config('services.paypal.client_id'),     // ClientID
+            config('services.paypal.client_secret')      // ClientSecret
+        ));
+
+        //Generamos otra clase Payer
+        $payer = new \PayPal\Api\Payer();
+        $payer->setPaymentMethod('paypal');
+
+        //Generamos la tercera clase (Amount) que dice la cantidad a pagar
+        $amount = new \PayPal\Api\Amount();
+
+        //precio a pagar
+        $amount->setTotal($precio);
+        $amount->setCurrency('EUR');
+
+        //Generamos otra clase donde le pasamos el precio y la moneda
+        $transaction = new \PayPal\Api\Transaction();
+        $transaction->setAmount($amount);
+
+        //le envioa la pagina informacion del id
+        //si se cancela lo llevo a la pagina que quiero
+        $redirectUrls = new \PayPal\Api\RedirectUrls();
+        $redirectUrls->setReturnUrl(url("comprado"))->setCancelUrl(url("/"));
+
+        $payment = new \PayPal\Api\Payment();
+        $payment->setIntent('sale')
+            ->setPayer($payer)
+            ->setTransactions(array($transaction))
+            ->setRedirectUrls($redirectUrls);
+
+        try {
+            $payment->create($apiContext);
+            //me redirige a la pagina de compra
+            return redirect()->away( $payment->getApprovalLink());
+
+        }catch (\PayPal\Exception\PayPalConnectionException $ex) {
+            // This will print the detailed information on the exception.
+            //REALLY HELPFUL FOR DEBUGGING
+            echo $ex->getData();
+        }
+
+    }
+
+    public function compra(){
+        return "La compra se ha completado con exito";
+
     }
 }
