@@ -16,6 +16,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style_principal.css">
     <script src="js/ajaxPrincipal.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <header>
@@ -35,12 +37,18 @@
     -->
     <div class="one-column-s1">
         <a href="{{ url('carritoview')}}">
-            <p><b style="padding-right: 10px;" onclick=""><img src="../public/img/carrito.png" alt="carrito" width="25px">@php
+            @php
                 if (isset($array3)){
+            @endphp
+                <p><b class="cesta" onclick=""><img src="../public/img/carrito.png" alt="carrito" width="25px">
+            @php
                     $numbb = count($array3);
                     print_r($numbb);
                 }else{
-                    echo "0";
+            @endphp
+                    <p><b class="cesta" onclick=""><img src="../public/img/carritonull.png" alt="carrito" width="25px">
+            @php
+                    echo "";
                 }
             @endphp</b></p>
         </a>
@@ -65,24 +73,34 @@
     @foreach ($listaCamiseta as $camiseta)
     <div class="three-column">
         <div class="box">
-            <img src="{{asset('storage').'/'.$camiseta->foto_cami}}" width="100">
+            <img src="{{asset('storage').'/'.$camiseta->foto_cami}}" width="100" class="zoom">
             <p><b>{{$camiseta->nombre_cami}}</b></p>
             <p style="color: rgba(112, 0, 0, 0.705)"> ̶8̶9̶,̶9̶5̶€̶</p>
             <h3>{{$camiseta->precio_cami}}€</h3>
             <form action="{{url('carritoadd')}}" method="POST">
                 @csrf
                 <input type="hidden" name="producto_id" value="{{$camiseta->id}}">
-            <select name="talla_cami" id="talla_cami">
-                <option value="M">TALLA</option>
-                    <option value="XS">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-            </select>
-            <br>
-            <br>
-            <button class="añadir" id="logout" type="submit" name="Pagar" value="Pagar">Añadir al carrito</button>
+                {{-- <div name="talla_cami" id="talla_cami">
+                    <div id="radios">
+                        <label for="input1">XS</label>
+                        <label for="input2">S</label>
+                        <label for="input3">M</label>
+                        <label for="input4">L</label>
+                        <label for="input5">XL</label>
+                    </div>
+                </div> --}}
+    
+                <select name="talla_cami" id="talla_cami" class="tallas">
+                    <option value="M" style="text-align: center" selected disabled>TALLAS DISPONIBLES</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                </select>
+                <br>
+                <br>
+                <button class="añadir" id="logout" type="submit" name="Pagar" value="Pagar">Añadir al carrito</button>
             </form>
         </div>
     </div>

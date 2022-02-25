@@ -1,3 +1,9 @@
+@if (!Session::get('correo_usu')||Session::get('rol_usu') != "usuario")
+    <?php
+        //Si la session no esta definida te redirige al login, la session se crea en el método.
+        return redirect()->to('/')->send();
+    ?>
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style_principal.css">
+    <link rel="stylesheet" href="css/style_compra.css">
     <script src="js/ajaxPrincipal.js"></script>
 </head>
 <body>
@@ -29,55 +35,24 @@
     -->
 
     <div class="one-column-s1-l">
-        <a href="{{ url('login')}}">
-            <p><b><img src="../public/img/login.png" alt=logout" width="25px"></b></p>
+        <a href="{{ url('logout')}}">
+            <p><b><img src="../public/img/logout.png" alt=logout" width="25px"></b></p>
         </a>
+        </div>
+        <div>
+            <marquee behavior="scroll" direction="right" scrolldelay="1">Compra realizada! @php echo Session::get('correo_usu') @endphp</marquee>
+            <br>
+            <br>
         </div>
 </div>
 
 <div class="row" id="camisetas">
     <div class="titulo">
-        <h2>CAMISETAS MÁS POPULARES</h2>
+        <h2>La compra se ha realizado con éxito</h2>
     </div> 
-    @foreach ($listaCamiseta as $camiseta)
-    <div class="three-column">
-        <div class="box">
-            <img src="{{asset('storage').'/'.$camiseta->foto_cami}}" width="100" class="zoom">
-            <p><b>{{$camiseta->nombre_cami}}</b></p>
-            <p style="color: rgba(112, 0, 0, 0.705)"> ̶8̶9̶,̶9̶5̶€̶</p>
-            <h3>{{$camiseta->precio_cami}}€</h3>
-            <form action="{{url('login')}}" method="GET">
-            {{-- <div name="talla_cami" id="talla_cami">
-                <div id="radios">
-                    <label for="input1">XS</label>
-                    <input  id="input1" name="radio" type="radio" />
-                    <label for="input2">S</label>
-                    <input  id="input2" name="radio" type="radio" />
-                    <label for="input3">M</label>
-                    <input  id="input3" name="radio" type="radio" />
-                    <label for="input4">L</label>
-                    <input  id="input4" name="radio" type="radio" />
-                    <label for="input5">XL</label>
-                    <input  id="input5" name="radio" type="radio" />
-                </div>
-            </div> --}}
-
-            <select name="talla_cami" id="talla_cami" class="tallas">
-                <option value="M" style="text-align: center" selected disabled>TALLAS DISPONIBLES</option>
-                    <option value="XS">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-            </select>
-
-            <br>
-            <br>
-            <button class="añadir" id="logout" type="submit" name="Pagar" value="Pagar">Añadir al carrito</button>
-        </form>
-        </div>
-    </div>
-    @endforeach
+    <a href="{{ url('principal')}}" >
+        <p class="seguir"><b>Ir a la página principal</b></p>
+    </a>
 </div>
 
 <footer>
