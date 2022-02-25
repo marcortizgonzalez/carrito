@@ -73,7 +73,7 @@
     @foreach ($listaCamiseta as $camiseta)
     <div class="three-column">
         <div class="box">
-            <img src="{{asset('storage').'/'.$camiseta->foto_cami}}" width="100" class="zoom">
+            <img src="{{asset('storage').'/'.$camiseta->foto_cami}}" width="100px" height="150px" class="zoom">
             <p><b>{{$camiseta->nombre_cami}}</b></p>
             <p style="color: rgba(112, 0, 0, 0.705)"> ̶8̶9̶,̶9̶5̶€̶</p>
             <h3>{{$camiseta->precio_cami}}€</h3>

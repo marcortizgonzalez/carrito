@@ -33,7 +33,7 @@ header {
 
 .zoom {
     transition: transform .2s;
-    padding: 20px 0px 20px 0px;
+    margin: 20px 0px 50px 0px;
 }
 
 .zoom:hover {
@@ -72,6 +72,8 @@ a:active {
 .box {
     margin: 30px;
     padding: 20px;
+    width: 100%;
+    height: 480px;
 }
 
 .box:hover {
