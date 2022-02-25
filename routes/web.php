@@ -39,6 +39,8 @@ Route::get('/principal_log',[CamisetaController::class, 'mostrarCamisetaLog']);
 
 Route::get('/principal_admin',[CamisetaController::class, 'mostrarCamisetaAdm']);
 
+Route::get('/compra_realizada',[CamisetaController::class, 'mostrarCompra']);
+
 //Filtro Principal en AJAX
 Route::post('principal/show',[CamisetaController::class,'show']);
 

@@ -11,14 +11,16 @@ class EnviarMensaje extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $sub;
+    public $datos;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($datos)
     {
-        //
+        $this->datos = $datos;
     }
 
     /**
@@ -28,6 +30,6 @@ class EnviarMensaje extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('correo')->subject($this->sub);
     }
 }

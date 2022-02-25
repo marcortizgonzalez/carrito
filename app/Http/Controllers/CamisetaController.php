@@ -26,6 +26,10 @@ class CamisetaController extends Controller
         return view('principal_log', compact('listaCamiseta'));
     }
 
+    public function mostrarCompra(){
+        return view('compra_realizada');
+    }
+
     /*Mostrar ADMIN*/
     public function mostrarCamisetaAdm(){
         $listaCamiseta = DB::table('camisetas')->select('*')->get();
@@ -89,6 +93,29 @@ class CamisetaController extends Controller
         $request->session()->flush();
         return redirect('/');
     }
+
+    /*Crear*/
+    public function crearCamiseta(){
+        return view('crear');
+    }
+
+    public function crearCamisetaPost(CamisetaCrear  $request){
+        $datos = $request->except('_token');
+        if($request->hasFile('foto_cami')){
+            $datos['foto_cami'] = $request->file('foto_cami')->store('uploads','public');
+        }else{
+            $datos['foto_cami'] = NULL;
+        }
+        try{
+            DB::beginTransaction();
+                DB::table('camisetas')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio_cami"=>$datos['precio_cami']]);
+            DB::commit();
+            return redirect('principal_admin');
+        }catch(\Exception $e){
+            DB::rollBack();
+            return $e->getMessage();
+        }
+    }
   
     /*Eliminar camiseta*/
     public function eliminarCamiseta($id){
@@ -135,43 +162,8 @@ class CamisetaController extends Controller
         return redirect('principal');
     }
   
-    /*Crear*/
-    public function crearCamiseta(){
-        return view('crear');
-    }
-
-    public function crearCamisetaPost(CamisetaCrear  $request){
-        $datos = $request->except('_token');
-
-        if($request->hasFile('foto_cami')){
-            $datos['foto_cami'] = $request->file('foto_cami')->store('uploads','public');
-        }else{
-            $datos['foto_cami'] = NULL;
-        }
-        return $datos;
-        try{
-            DB::beginTransaction();
-                DB::table('camisetas')->insertGetId(["foto_cami"=>$datos['foto_cami'],"nombre_cami"=>$datos['nombre_cami'],"precio_cami"=>$datos['precio_cami']]);
-            DB::commit();
-            return redirect('principal_admin');
-        }catch(\Exception $e){
-            DB::rollBack();
-            return $e->getMessage();
-        }
-    }
 
 
-    /*COMPRAR PROCESO Y MANDAR CORREO */
-    //Enviar correo al propietario
-    public function comprar(Request $request){
-    $sub = "Compra realizada con exito";
-    $msj = "Detalle del pedido: ".$request->input('array_pedido')." 
-    \r\nSe ha realizado la compra con el correo: ".session('correo_usu')."
-    \r\nCualquier inconveniente no dude en contactarnos. \r\n Atentamente el equipo de BBB CAMISETAS DE FÚTBOL";
-    $datos = array('message'=>$msj);
-    $enviar = new EnviarMensaje($datos);
-    $enviar->sub = $sub;
-    Mail::to(session('correo_usu'))->send($enviar);
 
     /*Dinero*/
     public function enviarDinero($precio){
@@ -224,8 +216,27 @@ class CamisetaController extends Controller
 
     }
 
-    public function compra(){
-        return "La compra se ha completado con exito";
-
+    /*COMPRAR PROCESO Y MANDAR CORREO */
+    public function compra(Request $request){
+        try{
+            DB::beginTransaction();
+                DB::table('tbl_pedidos')->insertGetId(["correo_pedido"=>session('correo_usu')]);
+            DB::commit();
+            $id_pedido = DB::table('tbl_pedidos')->where('correo_pedido', '=', session('correo_usu'))->orderBy('id', 'desc')->first();
+            $sub = "Compra realizada con exito";
+            $msj = "Número de pedido: ".$id_pedido->id." 
+            \r\nSe ha realizado la compra con el correo: ".session('correo_usu')."
+            \r\nCualquier inconveniente no dude en contactarnos. \r\n Atentamente el equipo de BBB CAMISETAS DE FÚTBOL";
+            $datos = array('message'=>$msj);
+            $enviar = new EnviarMensaje($datos);
+            $enviar->sub = $sub;
+            Mail::to(session('correo_usu'))->send($enviar);
+            $request->session()->forget('carrito');
+            //return "La compra se ha completado con exito";
+            return redirect('compra_realizada');
+        }catch(\Exception $e){
+            DB::rollBack();
+            return $e->getMessage();
+        }
     }
 }

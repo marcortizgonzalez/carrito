@@ -31,6 +31,31 @@ header {
 
 /* CLASES BODY */
 
+.zoom {
+    transition: transform .2s;
+    padding: 20px 0px 20px 0px;
+}
+
+.zoom:hover {
+    transform: scale(1.5);
+}
+
+a:link,
+a:visited,
+a:active {
+    text-decoration: none;
+}
+
+.cesta {
+    padding-right: 10px;
+    text-decoration: none;
+    color: red;
+}
+
+.cesta:hover {
+    color: rgb(180, 0, 0);
+}
+
 .titulo {
     padding-top: 70px;
     text-align: center;
@@ -41,7 +66,7 @@ header {
     width: 33.33%;
     float: left;
     text-align: center;
-    padding: 20px 0px 50px 0px;
+    padding: 20px 0px 10px 0px;
 }
 
 .box {
@@ -54,7 +79,66 @@ header {
 }
 
 .añadir {
+    min-width: 130px;
+    height: 40px;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
     cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    background: #3d348b;
+    box-shadow: 0 5px #2c0b8e;
+}
+
+.añadir:hover {
+    box-shadow: 0 3px #2c0b8e;
+    top: 1px;
+}
+
+.añadir:active {
+    box-shadow: 0 0 #2c0b8e;
+    top: 5px;
+}
+
+
+/*SELECCIONAR*/
+
+.tallas {
+    position: relative;
+    border: 1px solid #ccc;
+    width: 180px;
+    height: 30px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.tallas:before {
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 5px 0 5px;
+    border-color: #000000 transparent transparent transparent;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.tallas select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    appearance: none;
 }
 
 
